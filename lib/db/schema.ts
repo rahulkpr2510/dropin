@@ -2,20 +2,21 @@ import {pgTable, text, uuid, integer, boolean, timestamp} from "drizzle-orm/pg-c
 import { relations } from "drizzle-orm"
 
 export const files = pgTable("files", {
+    // Unique identifier for each file/folder
     id: uuid("id").defaultRandom().primaryKey(),
 
-    //basic file/folder information
+    // Basic file/folder information
     name: text("name").notNull(),
-    path: text("path").notNull(), // document/project/resume
-    size: integer("size").notNull(),
-    type: text("type").notNull(), //"folder"
+    path: text("path").notNull(), // Full path to the files/folder
+    size: integer("size").notNull(), // Size in bytes (0 for folders)
+    type: text("type").notNull(), // MIME type for files, "folder" for folders
 
-    // storage information
-    fileUrl: text("file_url").notNull(), // url to access the file
-    thumbnailUrl: text("thumbnail_url"),
+    // Storage information
+    fileUrl: text("file_url").notNull(), // URL to access the file
+    thumbnailUrl: text("thumbnail_url"), // Optional thumbnail for images/documents
 
-    // Ownership
-    userId: text("user_id").notNull(),
+    // Ownership and Hierarchy
+    userId: text("user_id").notNull(), // Owner of the file/folder
     parentId: uuid("parent_id"), // parent folder id (null for root item)
 
     // file/folder flages
